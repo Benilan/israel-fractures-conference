@@ -1,6 +1,6 @@
-"""Run the public, reproducible subset of Israel Fractures Conference."""
+"""Execute the original V18 conference analysis pipeline."""
 from pathlib import Path
-from src.analysis import run
+from src.pipeline_v16 import run
 
 if __name__ == "__main__":
     run(Path(__file__).resolve().parent)
