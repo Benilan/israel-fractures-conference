@@ -1,18 +1,27 @@
-name: Repository checks
+name: Python verification
+
 on:
   workflow_dispatch:
   push:
     branches: [main]
+  pull_request:
+
 jobs:
-  repository-readiness:
+  public-smoke-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify repository setup
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Check Python syntax
+        run: python -m compileall -q run_analysis.py tests
+      - name: Run public tests
+        run: python -m pytest tests -q
+      - name: Explain current coverage
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          assert Path("README.md").exists(), "README is missing"
-          print("Repository initialized successfully.")
-          print("FULL ANALYSIS NOT YET INSTALLED: this run does not verify the conference's numeric results.")
-          PY
+          echo "Smoke tests passed."
+          echo "IMPORTANT: the historical and CBS slide calculations were NOT run."
+          echo "Complete analysis requires full source modules and authorized data files."
