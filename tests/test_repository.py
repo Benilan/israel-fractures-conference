@@ -28,3 +28,12 @@ def test_official_netanyahu_bloc_reference():
 def test_pending_claims_not_misrepresented():
     assert 'slide_11_evolution_families' in PENDING
     assert 'slide_19_published_eta' in PENDING
+
+def test_presentation_plot_functions_available():
+    from src.presentation_charts import (
+        plot_2022_party_results, plot_cbs_religiosity,
+        plot_verified_netanyahu_bloc
+    )
+    assert callable(plot_2022_party_results)
+    assert callable(plot_cbs_religiosity)
+    assert callable(plot_verified_netanyahu_bloc)
