@@ -1,6 +1,22 @@
-Election,Party,Seats,OfficialSource
-K21,Likud,35,https://bechirot21.bechirot.gov.il/election/English/kneset20/Pages/Results.aspx
-K21,Shas,8,https://bechirot21.bechirot.gov.il/election/English/kneset20/Pages/Results.aspx
-K21,United Torah Judaism,8,https://bechirot21.bechirot.gov.il/election/English/kneset20/Pages/Results.aspx
-K21,Union of Right-Wing Parties,5,https://bechirot21.bechirot.gov.il/election/English/kneset20/Pages/Results.aspx
-K21,Kulanu,4,https://bechirot21.bechirot.gov.il/election/English/kneset20/Pages/Results.aspx
+Election,List,Seats,AnalyticalBloc,OfficialResultsURL
+K21,Likud,35,Netanyahu,https://main.knesset.gov.il/EN/mk/pages/elections.aspx
+K21,Shas,8,Netanyahu,https://main.knesset.gov.il/EN/mk/pages/elections.aspx
+K21,UTJ,8,Netanyahu,https://main.knesset.gov.il/EN/mk/pages/elections.aspx
+K21,Union Right Wing Parties,5,Netanyahu,https://main.knesset.gov.il/EN/mk/pages/elections.aspx
+K21,Kulanu,4,Netanyahu,https://main.knesset.gov.il/EN/mk/pages/elections.aspx
+K22,Likud,32,Netanyahu,https://main.knesset.gov.il/About/History/pages/knessethistory.aspx?kns=22
+K22,Shas,9,Netanyahu,https://main.knesset.gov.il/About/History/pages/knessethistory.aspx?kns=22
+K22,UTJ,7,Netanyahu,https://main.knesset.gov.il/About/History/pages/knessethistory.aspx?kns=22
+K22,Yamina,7,Netanyahu,https://main.knesset.gov.il/About/History/pages/knessethistory.aspx?kns=22
+K23,Likud,36,Netanyahu,https://votes23.bechirot.gov.il/
+K23,Shas,9,Netanyahu,https://votes23.bechirot.gov.il/
+K23,UTJ,7,Netanyahu,https://votes23.bechirot.gov.il/
+K23,Yamina,6,Netanyahu,https://votes23.bechirot.gov.il/
+K24,Likud,30,Netanyahu,https://main.knesset.gov.il/About/History/Pages/KnessetHistory.aspx?kns=24
+K24,Shas,9,Netanyahu,https://main.knesset.gov.il/About/History/Pages/KnessetHistory.aspx?kns=24
+K24,UTJ,7,Netanyahu,https://main.knesset.gov.il/About/History/Pages/KnessetHistory.aspx?kns=24
+K24,Religious Zionism,6,Netanyahu,https://main.knesset.gov.il/About/History/Pages/KnessetHistory.aspx?kns=24
+K25,Likud,32,Netanyahu,https://votes25.bechirot.gov.il/nationalresults
+K25,Shas,11,Netanyahu,https://votes25.bechirot.gov.il/nationalresults
+K25,UTJ,7,Netanyahu,https://votes25.bechirot.gov.il/nationalresults
+K25,Religious Zionism,14,Netanyahu,https://votes25.bechirot.gov.il/nationalresults
