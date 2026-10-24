@@ -6,7 +6,7 @@
 
 The original V18 computational modules are now published under `src/`:
 `pipeline_v16.py`, `heatmap_v15.py`, `socio_source.py`, and
-`historical_audit.py`. The superseded simplified implementation has been
+`historical_audit.py`, and `maps.py`. The superseded simplified implementation has been
 removed. Methodological comments, entry-point documentation and figure titles
 are in English; original categorical labels and source column names remain
 unchanged where translating them could affect reference outputs.
@@ -51,7 +51,7 @@ missing; a green code test does not certify the numerical slides.
 | 8 | Election threshold and below-threshold vote share |
 | 16 | Population-weighted locality religiosity indicators |
 | 17 | CBS socioeconomic distribution |
-| 20–21 | 2022 social clustering, demographics and nearest-neighbour diagnostic |
+| 20–21 | 2022 social clustering, demographics, nearest-neighbour diagnostic and locality-centroid map |
 | 23 | 2022 family vote heatmap, exact values and controlled rounding |
 | 13 (Netanyahu bloc) | Independent historical seats reference, 60 / 55 / 58 / 52 / 64 |
 | 11–12, 13 (other coalitions), 19 (V14) | Not yet fully incorporated in reproducible public pipeline |
@@ -74,3 +74,18 @@ Election records are from Israel's Central Elections Committee; social and
 economic measures are from Israel's Central Bureau of Statistics.
 Users must check redistribution permissions before sharing raw datasets.
 An open-source code license has not been selected yet.
+
+## Map outputs
+
+The single command `python run_analysis.py` now also generates:
+
+- `outputs/figures/slide_12_political_family_map.png`
+- `outputs/figures/slide_21_social_profiles_map.png`
+- `outputs/tables/slide_12_dominant_family_assignments.csv`
+
+These are **locality-centroid dot maps**, following the plotting approach found
+in the original historical analysis. They are not municipality-boundary
+choropleths. The 2022 classification is used for the slide 12 map; the
+2019–2022 stability calculation remains separate and needs its historical
+family mapping. All outputs are included in the GitHub Actions artifact when
+the data-dependent job succeeds.
