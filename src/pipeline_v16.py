@@ -172,6 +172,8 @@ def run(root:Path):
     rounded=round_rows_to_100(pct)
     output_csv(rounded.reset_index().rename(columns={'SocialProfile':'Social profile'}),tab/'slide_23_heatmap_2022_rounded100.csv')
     render(rounded,fig/'slide_23_heatmap_2022.png')
+    from .maps import generate as generate_maps
+    map_checks=generate(raw,out,complete,elections['K25'])
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -191,6 +193,8 @@ def run(root:Path):
            'slide_19_sensitivity_generated':len(eta)==6,
            'slide_23_haredi_80_69':abs(pct.loc['Ultra-orthodoxe','Haredi']-80.69)<0.05,
            'slide_23_metro_58_76':abs(pct.loc['Métropolitain aisé','Centre-gauche laïque']-58.76)<0.05}
+    checks['slide_12_map_generated']=map_checks['slide_12_map_localities']>500
+    checks['slide_21_map_generated']=map_checks['slide_21_map_localities']>500
     checks={k:bool(v) for k,v in checks.items()}
     from .historical_audit import verify_bloc, list_inventory
     bloc=verify_bloc(root)
