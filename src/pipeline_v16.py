@@ -154,6 +154,8 @@ def run(root:Path):
     output_csv(national,tab/'slide_07_national_reference.csv')
     threshold,below=calc_threshold(elections['K25'])
     output_csv(threshold,tab/'slide_08_threshold_all_lists_2022.csv')
+    from .presentation_charts import plot_2022_party_results, plot_cbs_religiosity, plot_verified_netanyahu_bloc
+    plot_2022_party_results(threshold, fig/'slide_08_results_2022_by_party.png')
     pct,grouped,complete,stats,meta=compute(raw)
     socio10,socio5,socio_base=calc_socioeconomic(raw,cbs)
     output_csv(socio10,tab/'slide_17_socioeconomic_1_to_10.csv')
@@ -161,6 +163,7 @@ def run(root:Path):
     profile=profile_distribution(complete)
     religiosity=calc_religiosity_table(cbs)
     output_csv(religiosity,tab/'slide_16_religiosity_weighted_descriptives.csv')
+    plot_cbs_religiosity(religiosity, fig/'slide_16_cbs_by_religiosity.png')
     neighbour=calc_nearest_neighbour(raw,complete)
     output_csv(neighbour,tab/'slide_21_nearest_neighbour_check.csv')
     eta=calc_v15_eta_sensitivity(raw,cbs,complete)
@@ -200,6 +203,7 @@ def run(root:Path):
     bloc=verify_bloc(root)
     inventory=list_inventory(root)
     output_csv(bloc,tab/'slide_13_verified_netanyahu_bloc.csv')
+    plot_verified_netanyahu_bloc(bloc, fig/'slide_13_netanyahu_bloc_evolution_verified.png')
     output_csv(inventory,tab/'slides_09_12_historical_list_inventory_UNMAPPED.csv')
     checks['slide_13_netanyahu_bloc_official_seats']=bool(bloc.MatchesPDF.all())
     report={'pipeline':'Publication release V18','status':'PASS' if all(checks.values()) else 'FAIL','checks':checks,
