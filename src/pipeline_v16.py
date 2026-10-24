@@ -173,7 +173,7 @@ def run(root:Path):
     output_csv(rounded.reset_index().rename(columns={'SocialProfile':'Social profile'}),tab/'slide_23_heatmap_2022_rounded100.csv')
     render(rounded,fig/'slide_23_heatmap_2022.png')
     from .maps import generate as generate_maps
-    map_checks=generate(raw,out,complete,elections['K25'])
+    map_checks=generate_maps(raw,out,complete,elections['K25'])
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
