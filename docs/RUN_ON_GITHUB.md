@@ -1,24 +1,29 @@
-# Running the project using GitHub Actions
+# GitHub Actions and reproducibility
 
-Go to **Actions → Python verification → Run workflow**.
+Select **Actions → Python verification → Run workflow**.
 
-The public job checks Python syntax and a minimal smoke-test suite. It **does
-not** establish that conference figures were reproduced.
+The workflow compiles the committed Python source and tests important invariants,
+including mutually exclusive 2022 voting families, Shas in the Haredi family,
+and controlled percentage rounding.
 
-For full reproducibility, the research pipeline (`src/pipeline_v16.py`,
-`src/heatmap_v15.py`, `src/socio_source.py`, `src/historical_audit.py`)
-and nine original election/CBS files must be made available to the runner.
-The public GitHub repository does not currently include those files.
-
-The local V18 package can be run where those source files are held:
+**Important:** raw source files are not included in this public repository.
+Thus passing actions tests are not evidence that all conference numbers were
+recalculated. To run 2022 electoral / social analysis, provide the five official
+election CSV files and the CBS census file under `data/raw/`, retaining
+the input names in `src/analysis.py`, then run:
 
 ```bash
-python -m pip install -r requirements.txt
+pip install -r requirements.txt
 python run_analysis.py
-python -m pytest tests -q
+pytest -q
 ```
 
-The historical grouping corrections for Shas and Zehut should be encoded
-in a single auditable mapping before claiming that the slide 11 series are
-reproduced. Validation of slide 13 alternative blocs must likewise be
-clearly distinguished from the verified Netanyahu-bloc seat totals.
+The current public source computes the turnout-by-dominant-religion output
+(slide 7), social profiles (slides 20–21) and 2022 heatmap (slide 23).
+It does **not** yet reproduce every election-history and socioeconomic
+calculation. The historically reported results for slides 11–13 and 19 require
+reconciliation of the historic electoral family classification, including the
+Zehut list in K21, and the source-specific weighted ANOVA procedure.
+
+For a truly automated full run on Actions, publish redistribution-cleared source
+data or configure a reliable, documented, legally permitted data download.
