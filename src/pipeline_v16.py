@@ -178,6 +178,8 @@ def run(root:Path):
     output_csv(religiosity,tab/'slide_16_religiosity_weighted_descriptives.csv')
     plot_cbs_reference(religiosity, fig/'slide_16_cbs_by_religiosity.png')
     plot_coalition_reference(fig/'slide_13_all_blocs_reference.png')
+    from .deck_visuals import coalition_coverage
+    output_csv(coalition_coverage(),tab/'slide_13_bloc_seat_coverage.csv')
     neighbour=calc_nearest_neighbour(raw,complete)
     output_csv(neighbour,tab/'slide_21_nearest_neighbour_check.csv')
     # Recompute historical electoral Ward families and V14 weighted eta
