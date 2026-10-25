@@ -37,3 +37,21 @@ def test_presentation_plot_functions_available():
     assert callable(plot_2022_party_results)
     assert callable(plot_cbs_religiosity)
     assert callable(plot_verified_netanyahu_bloc)
+
+def test_reference_deck_series_are_complete_and_sum_to_100():
+    import numpy as np
+    from src.deck_visuals import REFERENCE_SHARE, FAMILIES, ELECTIONS
+    assert REFERENCE_SHARE.shape == (5, 7)
+    assert len(FAMILIES) == 7 and len(ELECTIONS) == 5
+    assert np.allclose(REFERENCE_SHARE.sum(axis=1), 100, atol=.11)
+
+def test_2022_main_party_mapping_matches_reference():
+    from src.deck_visuals import PARTY_NAMES, MAIN_2022, K25_PPT_VALUES
+    assert len(MAIN_2022) == len(K25_PPT_VALUES) == 13
+    assert set(MAIN_2022).issubset(set(PARTY_NAMES.values()))
+
+def test_coalition_reference_netanyahu_totals():
+    from src.deck_visuals import COALITIONS
+    expected=[60,55,58,52,64]
+    actual=[sum(seats for _,seats in COALITIONS[k]['Netanyahu']) for k in ('K21','K22','K23','K24','K25')]
+    assert actual == expected
