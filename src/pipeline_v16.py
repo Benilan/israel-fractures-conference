@@ -200,7 +200,6 @@ def run(root:Path):
     ax=g.plot.bar(figsize=(8,4),title='CBS socioeconomic distribution (2021) — population 2022')
     ax.set_ylabel('Population share (%)');ax.set_xlabel('CBS index')
     ax.figure.tight_layout();ax.figure.savefig(fig/'slide_17_cbs_socioeconomic.png',dpi=180);plt.close(ax.figure)
-    p=turnout.pivot(index='Election',columns='DominantReligion',values='TurnoutPct').reindex(list(ELECTIONS))
     plot_turnout(turnout,national,fig/'slide_07_turnout_religion.png')
     checks={'slide_07_complete':len(turnout)>=20,'slide_08_threshold_range':8<below<10,
            'slide_17_groups_sum_100':bool(abs(socio5.PopulationSharePct.sum()-100)<1e-8),
