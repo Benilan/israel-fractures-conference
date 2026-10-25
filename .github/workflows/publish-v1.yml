@@ -1,0 +1,54 @@
+name: Publish v1.0.0 release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the release version
+        uses: actions/checkout@v4
+
+      - name: Publish GitHub release v1.0.0
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if gh release view v1.0.0 >/dev/null 2>&1; then
+            echo "Release v1.0.0 already exists; leaving it unchanged."
+            exit 0
+          fi
+          cat > /tmp/release-notes.md <<'NOTES'
+          First official release of the Israel Fractures Conference research code.
+
+          ## Scope
+          - Five Israeli Knesset elections (2019–2022).
+          - Classification of electoral parties into seven political families.
+          - CBS demographic, socioeconomic and religiosity analyses.
+          - Population-weighted K-means and descriptive statistical analysis.
+          - Reproducible charts, maps and automated validation.
+
+          ## Reproduce
+          Install dependencies from `requirements.txt`, then run
+          `python run_analysis.py` with the required official source data.
+
+          ## Limitation
+          Coalition-bloc visualizations contain analytical political groupings
+          and do not provide exhaustive, independently validated partitions
+          of all 120 parliamentary seats at every election.
+
+          ## License
+          Source code: MIT. Third-party election/CBS datasets and the
+          conference presentation retain their respective rights.
+          NOTES
+          gh release create v1.0.0 --target "$GITHUB_SHA" \
+            --title 'Israel Fractures Conference — v1.0.0' \
+            --notes-file /tmp/release-notes.md --latest
