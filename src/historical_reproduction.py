@@ -46,8 +46,6 @@ def calculate(raw:Path):
         df=df[df.LocalityCode.notna() & df.ValidVotes.gt(0)].copy()
         # Ignore special envelope entries when calculating common localities.
         name="LocalityName" if "LocalityName" in df else "LocalityNameHeb"
-        if name in df:
-            df=df[~df[name].astype("string").str.contains("מעטפות",na=False)]
         elections_norm[key]=df
         cols=party_vote_columns(df)
         tmp=df[["LocalityCode","ValidVotes",*cols]].melt(
@@ -63,7 +61,13 @@ def calculate(raw:Path):
     national=national.merge(totals,on="Election")
     national["Pct"]=100*national.Votes/national.ValidVotes
     selected=national.loc[national.Pct>=1,["Election","PartyLetter"]]
-    common=set.intersection(*(set(frame.LocalityCode.dropna()) for frame in elections_norm.values()))
+    common=set.intersection(*(
+        set(frame.loc[
+            ~frame["LocalityName"].astype("string").str.contains("מעטפות",na=False),
+            "LocalityCode"].dropna()) if "LocalityName" in frame
+        else set(frame.LocalityCode.dropna())
+        for frame in elections_norm.values()
+    ))
     local=votes[votes.LocalityCode.isin(common)].merge(selected,on=["Election","PartyLetter"],validate="many_to_one")
     local["Share"]=local.Votes/local.ValidVotes
     matrix=local.pivot(index=["Election","PartyLetter"],columns="LocalityCode",values="Share").sort_index()
