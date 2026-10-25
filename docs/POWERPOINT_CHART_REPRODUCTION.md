@@ -58,3 +58,18 @@ V14 weighted ANOVA are still PowerPoint references, not independently recalculat
 by the public pipeline; slide 13 full bloc composition likewise remains a
 reference reconstruction. These need genuine historical pipeline integration
 before asserting end-to-end scientific reproducibility.
+
+## Finalization update (October 2026)
+
+The slide 11 and slide 19 image functions now consume the independently
+recomputed CSVs directly. Their labels retain the legacy `_reference.png`
+filenames for backward compatibility with existing artifacts, but their
+data sources are no longer editable PowerPoint chart values.
+
+The slide 13 figure is schematic, not a full 120-seat partition.
+`outputs/tables/slide_13_bloc_seat_coverage.csv` explicitly records each
+election's Netanyahu-seat subtotal, other illustrated subtotal and seats
+not allocated in the figure. Do not claim it certifies all opposition parties,
+or use its illustrated partial opposition as a parliamentary total.
+The authoritative Knesset election source overview is
+https://main.knesset.gov.il/EN/mk/pages/elections.aspx .
