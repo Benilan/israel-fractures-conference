@@ -153,6 +153,18 @@ def run(root:Path):
     output_csv(turnout,tab/'slide_07_turnout_dominant_religion.csv')
     output_csv(national,tab/'slide_07_national_reference.csv')
     threshold,below=calc_threshold(elections['K25'])
+    # Three highlighted losing lists are not the same as all losing lists.
+    featured_codes=['מרצ','ד','ב']
+    featured=threshold.loc[threshold.PartyCode.isin(featured_codes)]
+    if len(featured)!=3 or featured.AboveThreshold.any():
+        raise AssertionError('Slide 8 featured below-threshold lists were not found')
+    featured_pct=float(featured.SharePct.sum())
+    if not (7.20<featured_pct<7.35 and 8.65<below<8.90):
+        raise AssertionError('Slide 8 featured/all losing-list shares differ from reference')
+    pd.DataFrame([{'Scope':'Three highlighted lists (Meretz, Balad, Jewish Home)','SharePct':featured_pct},
+                  {'Scope':'All below-threshold lists','SharePct':float(below)},
+                  {'Scope':'Other below-threshold lists','SharePct':float(below-featured_pct)}]).to_csv(
+        tab/'slide_08_losing_vote_scope_comparison.csv',index=False)
     output_csv(threshold,tab/'slide_08_threshold_all_lists_2022.csv')
     from .presentation_charts import plot_2022_party_results, plot_cbs_religiosity, plot_verified_netanyahu_bloc
     from .deck_visuals import (plot_2022_parties, plot_turnout, plot_seven_families_reference,
