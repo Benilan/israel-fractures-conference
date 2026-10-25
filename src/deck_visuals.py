@@ -115,6 +115,21 @@ COALITIONS={
  'K25':{'Netanyahu':[('Likud',32),('Haredim',18),('National religious',14)],
         'Opposition':[('Center',36),('Left',4),('Lieberman',6)]},
 }
+def coalition_coverage():
+    """Quantify what the conference's stylized bloc figure leaves unallocated.
+
+    The values do not certify opposition membership or government membership.
+    """
+    rows=[]
+    for election,blocs in COALITIONS.items():
+        net=sum(v for _,v in blocs["Netanyahu"])
+        other=sum(v for _,v in blocs["Opposition"])
+        rows.append({"Election":election,"NetanyahuBlocSeats":net,
+                     "OtherDisplayedSeats":other,
+                     "UnallocatedSeats":120-net-other,
+                     "Complete120SeatPartition":net+other==120})
+    return pd.DataFrame(rows)
+
 COALITION_COLORS={'Likud':BLUE,'Haredim':'#6852a3','National religious':RED,
  'Center':'#83abc9','Left':'#e0ac66','Yamina':'#72a76c','Ra’am':GREEN,'Lieberman':ORANGE}
 def plot_coalition_reference(out:Path):
