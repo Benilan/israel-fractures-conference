@@ -91,23 +91,32 @@ def calculate(raw:Path):
     ass["Family"]=ass.Cluster.map(cluster_names)
     mapping=national.merge(ass,on=["Election","PartyLetter"],how="left",validate="one_to_one")
     mapping["WardFamily"]=mapping.Family
+    # The V14 ANOVA was run on seven Ward groups plus Other, BEFORE the
+    # presentation merged two center-left clusters into a single family.
+    # Keep the statistical partition distinct from the slide 11 family labels.
+    mapping["WardGroupV14"]=mapping.Cluster.map(
+        lambda x: f"Ward {int(x)}" if pd.notna(x) else "Other"
+    )
     mapping["Family"]=mapping.Family.fillna("Other lists")
     mapping["Correction"]=""
     shas=mapping.PartyLetter.eq("שס")
     mapping.loc[shas,["Family","Correction"]]=["Haredim","Shas -> Haredim"]
+    mapping.loc[shas,"WardGroupV14"]=f"Ward {anchors['Haredim']}"
     zehut=mapping.Election.eq("K21") & mapping.PartyLetter.eq("ז")
     if zehut.sum()!=1:raise AssertionError("K21 Zehut missing")
     mapping.loc[zehut,["Family","Correction"]]=["Secular national right","K21 Zehut -> secular right"]
-    mapped=votes.merge(mapping[["Election","PartyLetter","Family"]],on=["Election","PartyLetter"],validate="many_to_one")
+    mapped=votes.merge(mapping[["Election","PartyLetter","Family","WardGroupV14"]],on=["Election","PartyLetter"],validate="many_to_one")
     aggregated=mapped.groupby(["Election","Family"],as_index=False).Votes.sum()
     share=aggregated.pivot(index="Election",columns="Family",values="Votes").fillna(0).reindex(ORDER)
     share=share.div(totals.ValidVotes,axis=0).mul(100).reindex(columns=LABELS,fill_value=0)
     if not np.allclose(share.sum(axis=1),100,atol=.01):
         raise AssertionError("National historical shares do not total 100%")
     # 2022 groups, on each locality: by family vote count
-    city=mapped[mapped.Election=="K25"].groupby(["LocalityCode","Family"],as_index=False).Votes.sum()
-    win=city.loc[city.groupby("LocalityCode").Votes.idxmax()][["LocalityCode","Family"]]
-    win=win.rename(columns={"Family":"DominantBlock"})
+    city=mapped[mapped.Election=="K25"].groupby(
+        ["LocalityCode","WardGroupV14"],as_index=False).Votes.sum()
+    win=city.loc[city.groupby("LocalityCode").Votes.idxmax()][
+        ["LocalityCode","WardGroupV14"]]
+    win=win.rename(columns={"WardGroupV14":"DominantBlock"})
     cbs=read_cbs(raw)
     data=cbs.merge(win,on="LocalityCode",how="inner",validate="one_to_one")
     effects=[]
