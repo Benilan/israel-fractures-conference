@@ -56,3 +56,13 @@ def test_coalition_reference_netanyahu_totals():
     expected=[60,55,58,52,64]
     actual=[sum(seats for _,seats in COALITIONS[k]['Netanyahu']) for k in ('K21','K22','K23','K24','K25')]
     assert actual == expected
+
+def test_independent_historical_analysis_is_available():
+    from src.historical_reproduction import calculate, export, EXPECTED_ETA
+    assert callable(calculate) and callable(export)
+    assert len(EXPECTED_ETA) == 6
+    assert EXPECTED_ETA["AcadmCert_pcnt"] == 714
+
+def test_historical_annotations_do_not_claim_full_coalition_coverage():
+    from src.pipeline_v16 import PENDING
+    assert "slide_13_coalition_scenarios" in PENDING
