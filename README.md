@@ -4,17 +4,17 @@
 
 ## Publication status
 
-The original V18 computational modules are now published under `src/`:
-`pipeline_v16.py`, `heatmap_v15.py`, `socio_source.py`, and
-`historical_audit.py`, and `maps.py`. The superseded simplified implementation has been
-removed. Methodological comments, entry-point documentation and figure titles
-are in English; original categorical labels and source column names remain
-unchanged where translating them could affect reference outputs.
+The complete election/CBS pipeline is implemented in Python and runs
+through a single entry point, `python run_analysis.py`. GitHub Actions was
+reported passing after the Ward/V14 scientific corrections. The October 2026
+finalization updates visualizations so slides 11 and 19 consume the
+independently recalculated data, not values embedded in PowerPoint.
+This latest revision requires its own CI confirmation.
 
-**Not all historical conference analyses are yet reproduced end to end.**
-In particular, the original multi-election political clustering and Zehut
-exception, complete coalition mapping, and exact V14 slide 19 ANOVA are not
-part of the presently certified public workflow.
+**Scope limitation:** slides 13's historical bloc labels are political
+interpretations. Netanyahu bloc totals are checked against the reference
+seat table, but the other displayed parliamentary segments are not a complete
+official 120-seat-per-election reconstruction.
 
 ## Execute
 
@@ -25,9 +25,9 @@ python run_analysis.py
 ```
 
 The last command requires the official election and CBS inputs in `data/raw/`.
-The public repository does not redistribute those datasets; use the separate
-V18 local package supplied with this project or download from authorized
-original sources and preserve the filenames.
+The workflow copies available files from `data/manual/` into `data/raw/`.
+Use the named official-source election and CBS files, and verify redistribution
+permissions before distributing any third-party data.
 
 When data are present, outputs are written to `outputs/tables/` and
 `outputs/figures/`. The JSON report is
@@ -45,16 +45,16 @@ missing; a green code test does not certify the numerical slides.
 
 ## Coverage
 
-| Slides | Public V18 pipeline |
+| Slides | Reproducible pipeline |
 | --- | --- |
-| 7 | Locality-level turnout grouped by CBS dominant religion |
-| 8 | Election threshold and below-threshold vote share |
-| 16 | Population-weighted locality religiosity indicators |
-| 17 | CBS socioeconomic distribution |
-| 20–21 | 2022 social clustering, demographics, nearest-neighbour diagnostic and locality-centroid map |
-| 23 | 2022 family vote heatmap, exact values and controlled rounding |
-| 13 (Netanyahu bloc) | Independent historical seats reference, 60 / 55 / 58 / 52 / 64 |
-| 11–12, 13 (other coalitions), 19 (V14) | Not yet fully incorporated in reproducible public pipeline |
+| 7–8 | Turnout by dominant locality religion; full national electoral threshold |
+| 11 | Ward family evolution across K21–K25, including Shas and Zehut corrections |
+| 12 | Locality-centroid map of dominant 2022 political family |
+| 13 | Visual bloc composition; Netanyahu totals independently cross-checked |
+| 16–17 | CBS religiosity profile and socioeconomic distribution |
+| 19 | Population-weighted descriptive eta squared using historical Ward partition |
+| 20–21 | Weighted social K-means, neighbour analysis and locality-centroid map |
+| 23 | Social-profile by political-family vote share heatmap |
 
 ## Methodology
 
@@ -64,9 +64,8 @@ assigned; ecological associations are not causal effects. Social clustering
 uses population-weighted K-means and fixed input columns. The 2022
 political-family table explicitly includes Shas under Haredi.
 
-The K21 Zehut reassignment is historically relevant but is not yet
-implemented in the current public V18 pipeline. Accordingly, the
-published workflow must not be presented as replicating slide 11.
+The K21 Zehut and Shas corrections are explicitly implemented and audited
+in the historical reconstruction module.
 
 ## Source attribution and licensing
 
@@ -100,7 +99,6 @@ New CSVs and a diagnostics JSON are written to `outputs/tables/`.
 
 See [scientific verification and limitations](docs/HISTORICAL_SCIENTIFIC_VERIFICATION.md).
 The opposition/coalition segments of slide 13 are **not yet fully certified**
-against a complete 120-seat-per-election official table. Reference charts
-continue to use PowerPoint values until switched to the independently
-recomputed tables. The latest GitHub Actions run must be checked before
-marking the new module as operational.
+against a complete 120-seat-per-election official table. Slides 11 and 19 now use computed CSVs; the coalition composition chart
+still carries an explicit PowerPoint-reference interpretation. Confirm the
+latest workflow after any code change.
