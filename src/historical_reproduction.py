@@ -147,9 +147,32 @@ def export(raw:Path,out:Path):
     mapping.to_csv(out/"historical_ward_family_assignments.csv",index=False,encoding="utf-8-sig")
     share.to_csv(out/"slide_11_historical_families_recomputed.csv",encoding="utf-8-sig")
     eta.to_csv(out/"slide_19_weighted_eta_v14_recomputed.csv",index=False,encoding="utf-8-sig")
-    ok11=abs(share.loc["K25","Religious Zionism"]-share.loc["K21","Religious Zionism"]-5.114)<.04
-    ok19=all(abs(row.EtaSquaredX1000-row.PowerPointReference)<.65 for row in eta.itertuples())
-    diagnostics={"slide_11_matches":bool(ok11),"slide_19_matches":bool(ok19),**detail}
-    (out/"historical_recalculation_report.json").write_text(json.dumps(diagnostics,indent=2),encoding="utf-8")
-    if not ok11 or not ok19:raise AssertionError("Historical audit differs from expected reference")
+    changes=(share.loc["K25"]-share.loc["K21"]).to_dict()
+    eta_comparison=[
+        {"variable":str(row.Variable),
+         "computed_eta_x1000":round(float(row.EtaSquaredX1000),5),
+         "powerpoint_reference":float(row.PowerPointReference),
+         "difference":round(float(row.EtaSquaredX1000-row.PowerPointReference),5)}
+        for row in eta.itertuples()
+    ]
+    ok11=abs(changes["Religious Zionism"]-5.114)<.04
+    ok19=all(abs(row["difference"])<.65 for row in eta_comparison)
+    diagnostics={
+        "slide_11_matches":bool(ok11),
+        "slide_19_matches":bool(ok19),
+        "slide_11_all_family_changes_pp":{k:round(float(v),5) for k,v in changes.items()},
+        "slide_19_variable_comparison":eta_comparison,
+        **detail,
+    }
+    report=out/"historical_recalculation_report.json"
+    report.write_text(json.dumps(diagnostics,indent=2,ensure_ascii=False),encoding="utf-8")
+    print("HISTORICAL AUDIT DIAGNOSTICS:",json.dumps(diagnostics,indent=2,ensure_ascii=False),flush=True)
+    if not ok11 or not ok19:
+        failures=[]
+        if not ok11:failures.append(
+            f"slide 11 Religious Zionism delta={changes['Religious Zionism']:.5f} pp; expected 5.114 pp")
+        if not ok19:failures.append("slide 19 eta deviations="+str(
+            [(r["variable"],r["difference"]) for r in eta_comparison if abs(r["difference"])>=.65]))
+        raise AssertionError("; ".join(failures)+
+            "; see outputs/tables/historical_recalculation_report.json")
     return diagnostics
