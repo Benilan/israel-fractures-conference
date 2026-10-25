@@ -29,14 +29,15 @@ def test_pending_claims_not_misrepresented():
     assert 'slide_11_evolution_families' in PENDING
     assert 'slide_19_published_eta' in PENDING
 
-def test_presentation_plot_functions_available():
-    from src.presentation_charts import (
-        plot_2022_party_results, plot_cbs_religiosity,
-        plot_verified_netanyahu_bloc
+def test_current_presentation_plot_functions_available():
+    from src.deck_visuals import (
+        plot_2022_parties, plot_turnout, plot_seven_families_reference,
+        plot_coalition_reference, plot_anova_reference, plot_cbs_reference,
     )
-    assert callable(plot_2022_party_results)
-    assert callable(plot_cbs_religiosity)
-    assert callable(plot_verified_netanyahu_bloc)
+    assert all(callable(f) for f in (
+        plot_2022_parties, plot_turnout, plot_seven_families_reference,
+        plot_coalition_reference, plot_anova_reference, plot_cbs_reference,
+    ))
 
 def test_reference_deck_series_are_complete_and_sum_to_100():
     import numpy as np
