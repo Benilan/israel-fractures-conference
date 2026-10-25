@@ -86,3 +86,19 @@ Note: do not interpret passing image-rendering tests as scientific
 verification; reference graphics on slides 11, 13 and 19 currently use
 the editable PowerPoint values rather than the newly recomputed CSVs.
 These charts should ultimately consume the recomputed tables directly.
+
+## Correction after GitHub execution — V14 grouping
+
+The 25 October GitHub diagnostics identified that the first implementation
+merged the two Ward center-left clusters **before** computing weighted eta
+squared. This is appropriate for the seven-family national comparison on
+slide 11 but changes the grouping in the V14 ANOVA. The code now retains an
+unmerged `WardGroupV14` column (seven Ward groups plus Other, with Shas
+reassigned to Haredim) for slide 19; `Family` continues to hold the seven
+presentation-family labels for slide 11.
+
+Previously failing values (education 674.54476 versus 714; computer
+equipment 643.81062 versus 671) were obtained with the improperly merged
+groups, **not** evidence that the historical slide values were falsified.
+The new GitHub Actions execution must still be checked. The audit continues
+to fail if the recalculated values differ materially.
