@@ -40,3 +40,21 @@ and visual polish are not pixel-identical to the PowerPoint.
 
 The workflow archives outputs from `outputs/` when the numerical runner
 passes. A failed run must not produce a green validation claim.
+
+## 25 October 2026 — visual and scope corrections
+
+Both locality-centroid maps now include geographic orientation labels for Haifa,
+Tel Aviv, Jerusalem, Beersheba and Ariel. These are visual anchors only; they do
+not influence classification or statistics.
+
+The full pipeline also exports
+`outputs/tables/slide_08_losing_vote_scope_comparison.csv`, reporting
+the three highlighted losing lists (approximately 7.27%), all below-threshold
+lists (approximately 8.76%), and the difference (approximately 1.49 percentage
+points). It fails explicitly if the expected three listed parties are absent.
+
+**Remaining research limitations:** slide 11 seven-family series and slide 19
+V14 weighted ANOVA are still PowerPoint references, not independently recalculated
+by the public pipeline; slide 13 full bloc composition likewise remains a
+reference reconstruction. These need genuine historical pipeline integration
+before asserting end-to-end scientific reproducibility.
