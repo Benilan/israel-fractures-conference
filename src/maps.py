@@ -50,13 +50,18 @@ def scatter_locality_map(data,category,size,colors,title,target):
         ax.scatter(part.lon,part.lat,s=point_size.loc[part.index],color=colors.get(str(label),'#9CA3AF'),label=str(label),alpha=.82,linewidths=0)
     # Selected city anchors are approximate cartographic labels for orientation.
     # They do not enter any calculations or locality classification.
-    anchors={'Haifa':(34.99,32.79),'Tel Aviv':(34.78,32.08),
-             'Jerusalem':(35.22,31.77),'Beersheba':(34.80,31.25),'Ariel':(35.19,32.11)}
-    for city,(lon,lat) in anchors.items():
+    anchors={
+        'Haifa': ((34.99,32.79),(-35,12)),
+        'Tel Aviv': ((34.78,32.08),(-66,-12)),
+        'Jerusalem': ((35.22,31.77),(12,-10)),
+        'Beersheba': ((34.80,31.25),(14,-16)),
+        'Ariel': ((35.19,32.11),(12,14)),
+    }
+    for city,((lon,lat),offset) in anchors.items():
         ax.scatter([lon],[lat],marker='+',c='#222222',s=28,zorder=5,linewidths=.8)
-        ax.annotate(city,(lon,lat),xytext=(5,3),textcoords='offset points',
+        ax.annotate(city,(lon,lat),xytext=offset,textcoords='offset points',
                     fontsize=8,color='#242424',zorder=6,
-                    bbox={'facecolor':'white','edgecolor':'none','alpha':.55,'pad':1})
+                    bbox={'facecolor':'white','edgecolor':'none','alpha':.75,'pad':1.5})
     ax.set_xlim(34.1,35.9);ax.set_ylim(29.3,33.5);ax.axis('off')
     ax.set_title(title,fontsize=12,fontweight='bold')
     ax.legend(loc='lower left',frameon=False,fontsize=8,markerscale=1.2)
