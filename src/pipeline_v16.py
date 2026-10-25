@@ -177,15 +177,18 @@ def run(root:Path):
     religiosity=calc_religiosity_table(cbs)
     output_csv(religiosity,tab/'slide_16_religiosity_weighted_descriptives.csv')
     plot_cbs_reference(religiosity, fig/'slide_16_cbs_by_religiosity.png')
-    plot_seven_families_reference(fig/'slide_11_seven_families_reference.png')
     plot_coalition_reference(fig/'slide_13_all_blocs_reference.png')
-    plot_anova_reference(fig/'slide_19_weighted_anova_V14_reference.png')
     neighbour=calc_nearest_neighbour(raw,complete)
     output_csv(neighbour,tab/'slide_21_nearest_neighbour_check.csv')
     # Recompute historical electoral Ward families and V14 weighted eta
     # independently of the figures embedded in the conference PowerPoint.
     from .historical_reproduction import export as export_historical
     historic_audit=export_historical(raw,tab)
+    # Plot independent historical results, never slide-embedded reference values.
+    computed_share=pd.read_csv(tab/'slide_11_historical_families_recomputed.csv',index_col=0)
+    computed_eta=pd.read_csv(tab/'slide_19_weighted_eta_v14_recomputed.csv')
+    plot_seven_families_reference(fig/'slide_11_seven_families_reference.png',computed_share)
+    plot_anova_reference(fig/'slide_19_weighted_anova_V14_reference.png',computed_eta)
     eta=calc_v15_eta_sensitivity(raw,cbs,complete)
     output_csv(eta,tab/'slide_19_V15_sensitivity_NOT_published_V14.csv')
     output_csv(profile,tab/'slide_20_21_social_profile_population.csv')
