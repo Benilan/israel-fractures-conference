@@ -66,3 +66,17 @@ def test_independent_historical_analysis_is_available():
 def test_historical_annotations_do_not_claim_full_coalition_coverage():
     from src.pipeline_v16 import PENDING
     assert "slide_13_coalition_scenarios" in PENDING
+
+def test_bloc_chart_does_not_claim_to_allocate_all_seats():
+    from src.deck_visuals import coalition_coverage
+    frame=coalition_coverage().set_index('Election')
+    assert list(frame.index)==['K21','K22','K23','K24','K25']
+    assert frame.NetanyahuBlocSeats.to_dict()=={'K21':60,'K22':55,'K23':58,'K24':52,'K25':64}
+    assert (frame.UnallocatedSeats>=0).all()
+    assert not frame.Complete120SeatPartition.all()
+
+def test_historical_chart_functions_consume_recomputed_data():
+    import inspect
+    from src.deck_visuals import plot_seven_families_reference, plot_anova_reference
+    assert 'computed_share' in inspect.signature(plot_seven_families_reference).parameters
+    assert 'computed_eta' in inspect.signature(plot_anova_reference).parameters
