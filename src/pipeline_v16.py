@@ -155,7 +155,9 @@ def run(root:Path):
     threshold,below=calc_threshold(elections['K25'])
     output_csv(threshold,tab/'slide_08_threshold_all_lists_2022.csv')
     from .presentation_charts import plot_2022_party_results, plot_cbs_religiosity, plot_verified_netanyahu_bloc
-    plot_2022_party_results(threshold, fig/'slide_08_results_2022_by_party.png')
+    from .deck_visuals import (plot_2022_parties, plot_turnout, plot_seven_families_reference,
+        plot_coalition_reference, plot_anova_reference, plot_cbs_reference)
+    plot_2022_parties(threshold, fig/'slide_08_results_2022_by_party.png')
     pct,grouped,complete,stats,meta=compute(raw)
     socio10,socio5,socio_base=calc_socioeconomic(raw,cbs)
     output_csv(socio10,tab/'slide_17_socioeconomic_1_to_10.csv')
@@ -163,7 +165,10 @@ def run(root:Path):
     profile=profile_distribution(complete)
     religiosity=calc_religiosity_table(cbs)
     output_csv(religiosity,tab/'slide_16_religiosity_weighted_descriptives.csv')
-    plot_cbs_religiosity(religiosity, fig/'slide_16_cbs_by_religiosity.png')
+    plot_cbs_reference(religiosity, fig/'slide_16_cbs_by_religiosity.png')
+    plot_seven_families_reference(fig/'slide_11_seven_families_reference.png')
+    plot_coalition_reference(fig/'slide_13_all_blocs_reference.png')
+    plot_anova_reference(fig/'slide_19_weighted_anova_V14_reference.png')
     neighbour=calc_nearest_neighbour(raw,complete)
     output_csv(neighbour,tab/'slide_21_nearest_neighbour_check.csv')
     eta=calc_v15_eta_sensitivity(raw,cbs,complete)
@@ -185,8 +190,7 @@ def run(root:Path):
     ax.set_ylabel('Population share (%)');ax.set_xlabel('CBS index')
     ax.figure.tight_layout();ax.figure.savefig(fig/'slide_17_cbs_socioeconomic.png',dpi=180);plt.close(ax.figure)
     p=turnout.pivot(index='Election',columns='DominantReligion',values='TurnoutPct').reindex(list(ELECTIONS))
-    ax=p.plot(marker='o',figsize=(10,5),title='Turnout — dominant CBS religion of localities')
-    ax.set_ylabel('Voters / registered voters (%)');ax.figure.tight_layout();ax.figure.savefig(fig/'slide_07_turnout_religion.png',dpi=180);plt.close(ax.figure)
+    plot_turnout(turnout,national,fig/'slide_07_turnout_religion.png')
     checks={'slide_07_complete':len(turnout)>=20,'slide_08_threshold_range':8<below<10,
            'slide_17_groups_sum_100':bool(abs(socio5.PopulationSharePct.sum()-100)<1e-8),
            'slide_20_21_profiles_1040':int(profile.Localities.sum())==1040,
