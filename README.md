@@ -89,3 +89,18 @@ choropleths. The 2022 classification is used for the slide 12 map; the
 2019–2022 stability calculation remains separate and needs its historical
 family mapping. All outputs are included in the GitHub Actions artifact when
 the data-dependent job succeeds.
+
+## October 2026 scientific audit
+
+The published `run_analysis.py` now also calls
+`src/historical_reproduction.py` to independently reconstruct the Ward
+electoral family groups, document the Shas/Zehut reassignment, and compute
+the historical population-weighted eta-squared indicators (V14 methodology).
+New CSVs and a diagnostics JSON are written to `outputs/tables/`.
+
+See [scientific verification and limitations](docs/HISTORICAL_SCIENTIFIC_VERIFICATION.md).
+The opposition/coalition segments of slide 13 are **not yet fully certified**
+against a complete 120-seat-per-election official table. Reference charts
+continue to use PowerPoint values until switched to the independently
+recomputed tables. The latest GitHub Actions run must be checked before
+marking the new module as operational.
