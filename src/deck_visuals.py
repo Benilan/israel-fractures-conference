@@ -82,17 +82,20 @@ def plot_turnout(turnout:pd.DataFrame,national:pd.DataFrame,out:Path):
     fig.text(.12,.01,'CBS dominant religion of each locality, not the religion of individual voters.',fontsize=9,color='#666')
     fig.tight_layout(rect=(0,.045,1,1));fig.savefig(out,dpi=190,bbox_inches='tight');plt.close(fig)
 
-def plot_seven_families_reference(out:Path):
+def plot_seven_families_reference(out:Path, computed_share:pd.DataFrame):
     fig,ax=plt.subplots(figsize=(12,6.8))
+    values=computed_share.reindex(index=['K21','K22','K23','K24','K25'],columns=FAMILIES)
+    if values.isna().any().any():raise ValueError('Incomplete recomputed family shares')
+    actual=values.to_numpy(dtype=float)
     bottom=np.zeros(5)
     for j,(family,c) in enumerate(zip(FAMILIES,FAMILY_COLORS)):
-        v=REFERENCE_SHARE[:,j]
+        v=actual[:,j]
         ax.bar(np.arange(5),v,bottom=bottom,label=family,width=.65,color=c)
         bottom+=v
     ax.set_xticks(range(5),ELECTIONS);ax.set_ylim(0,100);ax.set_ylabel('Share of valid votes (%)')
     ax.set_title('EVOLUTION OF SEVEN POLITICAL FAMILIES · 2019–2022',loc='left',fontsize=16,pad=18)
     ax.legend(loc='upper center',bbox_to_anchor=(.5,-.13),ncol=4,frameon=False,fontsize=9)
-    diffs=REFERENCE_SHARE[-1]-REFERENCE_SHARE[0]
+    diffs=actual[-1]-actual[0]
     comment='Apr 2019 → Nov 2022: '+ '   '.join(f'{n}: {x:+.1f} pp' for n,x in zip(['Center-left','Popular right','Rel. Zionism','Haredim','Arab','Secular right','Other'],diffs))
     fig.text(.07,.022,comment,fontsize=8,color='#333')
     fig.tight_layout(rect=(0,.065,1,1));fig.savefig(out,dpi=180,bbox_inches='tight');plt.close(fig)
@@ -137,16 +140,18 @@ def plot_coalition_reference(out:Path):
 
 ETA=[('Higher education',714),('Religiosity',694),('Computer equipment',671),
  ('Median age',661),('Median employee wages',658),('Average number of children',624)]
-def plot_anova_reference(out:Path):
+def plot_anova_reference(out:Path, computed_eta:pd.DataFrame):
     fig,ax=plt.subplots(figsize=(11,5.3))
-    names=[i[0] for i in ETA];vals=[i[1] for i in ETA]
+    x=computed_eta.sort_values('EtaSquaredX1000',ascending=False)
+    names=x.Label.tolist();vals=x.EtaSquaredX1000.to_numpy(float)
+    if len(vals)!=6:raise ValueError('Expected six recomputed ANOVA measures')
     bars=ax.barh(names,vals,color=[BLUE]+['#6688aa']*5,height=.65)
     ax.invert_yaxis();ax.set_xlim(0,790);ax.set_xlabel('Population-weighted η² × 1,000')
     ax.set_title('WHICH LOCALITY CHARACTERISTICS MOST DISTINGUISH VOTE PATTERNS?',loc='left',fontsize=14,pad=18)
     for b,v in zip(bars,vals):ax.text(v+6,b.get_y()+b.get_height()/2,str(v),va='center')
     ax.spines[['top','right','left']].set_visible(False);ax.tick_params(axis='y',length=0)
     ax.grid(axis='x',alpha=.12);ax.set_axisbelow(True)
-    fig.text(.13,.012,'Reference: published slide 19 V14 values; not recalculated by current GitHub V15 sensitivity model.',fontsize=9,color='#666')
+    fig.text(.13,.012,'Recomputed V14 population-weighted descriptive eta² from CBS localities and unmerged Ward groups.',fontsize=9,color='#666')
     fig.tight_layout(rect=(0,.04,1,1));fig.savefig(out,dpi=180,bbox_inches='tight');plt.close(fig)
 
 def plot_cbs_reference(religiosity:pd.DataFrame,out:Path):
