@@ -166,7 +166,6 @@ def run(root:Path):
                   {'Scope':'Other below-threshold lists','SharePct':float(below-featured_pct)}]).to_csv(
         tab/'slide_08_losing_vote_scope_comparison.csv',index=False)
     output_csv(threshold,tab/'slide_08_threshold_all_lists_2022.csv')
-    from .presentation_charts import plot_2022_party_results, plot_cbs_religiosity, plot_verified_netanyahu_bloc
     from .deck_visuals import (plot_2022_parties, plot_turnout, plot_seven_families_reference,
         plot_coalition_reference, plot_anova_reference, plot_cbs_reference)
     plot_2022_parties(threshold, fig/'slide_08_results_2022_by_party.png')
@@ -219,7 +218,7 @@ def run(root:Path):
     bloc=verify_bloc(root)
     inventory=list_inventory(root)
     output_csv(bloc,tab/'slide_13_verified_netanyahu_bloc.csv')
-    plot_verified_netanyahu_bloc(bloc, fig/'slide_13_netanyahu_bloc_evolution_verified.png')
+    # Full coalition composition chart is generated from the slide 13 reference.
     output_csv(inventory,tab/'slides_09_12_historical_list_inventory_UNMAPPED.csv')
     checks['slide_13_netanyahu_bloc_official_seats']=bool(bloc.MatchesPDF.all())
     report={'pipeline':'Publication release V18','status':'PASS' if all(checks.values()) else 'FAIL','checks':checks,
