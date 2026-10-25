@@ -115,9 +115,12 @@ def calculate(raw:Path):
         sub=data[["DominantBlock","pop_approx",col]].copy()
         sub[col]=pd.to_numeric(sub[col],errors="coerce")
         sub.pop_approx=pd.to_numeric(sub.pop_approx,errors="coerce")
-        sub=sub.dropna()
+        # Historical V14 selects eligible groups before filtering population
+        # weights: preserve the original order of operations exactly.
+        sub=sub.dropna(subset=["DominantBlock",col])
         eligible=sub.DominantBlock.value_counts()
         sub=sub[sub.DominantBlock.isin(eligible[eligible>=5].index)]
+        sub=sub.dropna(subset=["pop_approx"])
         sub=sub[sub.pop_approx>0]
         w=sub.pop_approx.to_numpy(float);v=sub[col].to_numpy(float)
         mean=np.average(v,weights=w)
