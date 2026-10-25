@@ -182,6 +182,10 @@ def run(root:Path):
     plot_anova_reference(fig/'slide_19_weighted_anova_V14_reference.png')
     neighbour=calc_nearest_neighbour(raw,complete)
     output_csv(neighbour,tab/'slide_21_nearest_neighbour_check.csv')
+    # Recompute historical electoral Ward families and V14 weighted eta
+    # independently of the figures embedded in the conference PowerPoint.
+    from .historical_reproduction import export as export_historical
+    historic_audit=export_historical(raw,tab)
     eta=calc_v15_eta_sensitivity(raw,cbs,complete)
     output_csv(eta,tab/'slide_19_V15_sensitivity_NOT_published_V14.csv')
     output_csv(profile,tab/'slide_20_21_social_profile_population.csv')
@@ -220,6 +224,8 @@ def run(root:Path):
     # Full coalition composition chart is generated from the slide 13 reference.
     output_csv(inventory,tab/'slides_09_12_historical_list_inventory_UNMAPPED.csv')
     checks['slide_13_netanyahu_bloc_official_seats']=bool(bloc.MatchesPDF.all())
+    checks['slide_11_independent_Ward_reproduction']=historic_audit['slide_11_matches']
+    checks['slide_19_independent_V14_eta_reproduction']=historic_audit['slide_19_matches']
     report={'pipeline':'Publication release V18','status':'PASS' if all(checks.values()) else 'FAIL','checks':checks,
             'statistics':{'socio_localities':len(socio_base),'socio_population':float(socio_base.pop_approx.sum()),
              'profile_localities':int(profile.Localities.sum()),'nearest_neighbour_pct':float(neighbour.ObservedSameNearestPct.iat[0]),'profile_votes':meta['valid_votes_in_scope'],
